@@ -1,5 +1,7 @@
 __pycache__
-.env*
+.env
+.env.dev
 celerybeat*
 permission.json
 .pre-commit*
+
