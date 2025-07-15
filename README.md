@@ -1,5 +1,5 @@
 # Project 2
-Ссылка на тестовое задание
+[Ссылка на тестовое задание](https://docs.google.com/document/d/1U9Ps-ItyAgiz95-KuvSiHmmHyiLnneVAXZsMaxHu3UA/edit?tab=t.0)
 
 ## Содержание
 - [О проекте](#о-проекте)
@@ -81,6 +81,7 @@ Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
 Смотри `.env.example`. Для переменных секретов и API-ключей используй `.env`.
 
 ## Структура permission.json
+!Все пользователи создаются по дефолту с ролью 1!
 
 Структура файла:
 ```
@@ -100,9 +101,6 @@ Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
     "/article/{*}": ["GET", "DELETE"]}
 }
 ```
-
-
-
 
 ## Скрипты
 
