@@ -1,3 +1,8 @@
-.pre-commit-config.yaml
 __pycache__
+.env
+.env.dev
+celerybeat*
 permission.json
+.pre-commit*
+.ruff_cache
+
