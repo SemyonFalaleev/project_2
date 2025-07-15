@@ -1,5 +1,6 @@
 from fastapi import Query
 
+
 class PaginatorParams:
     def __init__(
         self,

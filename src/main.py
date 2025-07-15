@@ -10,13 +10,11 @@ from decouple import config
 
 app = FastAPI(title="blog_marcketplace")
 
-app.add_middleware(RBACMidleware, 
-                   parse_permission_dict(config("PATH_TO_PERMISSION_JSON"))
-                   )
+app.add_middleware(
+    RBACMidleware, parse_permission_dict(config("PATH_TO_PERMISSION_JSON"))
+)
 
-app.add_middleware(AuthMiddleware,
-                   config("SECRET_KEY_JWT"),
-                   config("ALGORITM_JWT"))
+app.add_middleware(AuthMiddleware, config("SECRET_KEY_JWT"), config("ALGORITM_JWT"))
 
 app.include_router(router=user_router)
 app.include_router(router=category_router)

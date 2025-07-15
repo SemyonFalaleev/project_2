@@ -1,11 +1,8 @@
 from celery import Celery
 from decouple import config
-from celery.schedules import schedule 
 
 celery_app = Celery(
-    "worker",
-    broker=config("RABBITMQ_URL"),
-    include=["src.utils.celery.celery_tasks"]
+    "worker", broker=config("RABBITMQ_URL"), include=["src.utils.celery.celery_tasks"]
 )
 
 celery_app.conf.update(
@@ -15,4 +12,3 @@ celery_app.conf.update(
     timezone="Asia/Novosibirsk",
     enable_utc=True,
 )
-

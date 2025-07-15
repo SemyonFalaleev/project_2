@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from src.handlers.user.user_delete import router as delete_router
-from src.handlers.user.user_update import router as update_router 
-from src.handlers.user.user_get import router as get_router 
+from src.handlers.user.user_update import router as update_router
+from src.handlers.user.user_get import router as get_router
 # from src.utils.security import check_admin
 
 router = APIRouter(prefix="/user", tags=["User"])

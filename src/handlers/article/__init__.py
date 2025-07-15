@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from src.handlers.article.article_create import router as create_router
 from src.handlers.article.article_delete import router as delete_router
 from src.handlers.article.article_get import router as get_router

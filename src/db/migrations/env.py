@@ -10,7 +10,7 @@ from os.path import abspath, dirname
 import sys
 import asyncio
 from src.db.init_db import Base
-from src.db.models import *
+from src.db.models import * # noqa: F403
 from decouple import config
 
 sys.path.insert(0, dirname(dirname(abspath(__file__))))

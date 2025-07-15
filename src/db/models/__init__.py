@@ -4,4 +4,3 @@ from .category_model import Category
 from .roles_model import Role
 
 __all__ = ["Article", "User", "Category", "Role", "ArchivedArticle"]
-

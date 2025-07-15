@@ -11,14 +11,15 @@ router = APIRouter()
     "/{category_id}", status_code=status.HTTP_204_NO_CONTENT, response_model=None
 )
 async def delete_category(
-    category_id: int, 
-    session: AsyncSession = Depends(get_async_db)
+    category_id: int, session: AsyncSession = Depends(get_async_db)
 ) -> None:
     try:
-        result = await session.execute(select(Category).where(Category.id == category_id))
+        result = await session.execute(
+            select(Category).where(Category.id == category_id)
+        )
         obj = result.scalar_one_or_none()
 
-        if obj == None:
+        if obj is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
             )
@@ -26,7 +27,6 @@ async def delete_category(
         await session.commit()
 
     except HTTPException as ex:
-        return Response(content=f"{ex}",
-                        status_code=status.HTTP_400_BAD_REQUEST)
+        return Response(content=f"{ex}", status_code=status.HTTP_400_BAD_REQUEST)
 
     return None

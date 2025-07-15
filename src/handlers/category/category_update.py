@@ -1,4 +1,3 @@
-from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from src.dto.category_dto import CategoryDTOUpdate, CategoryDTOGetMin
@@ -10,15 +9,21 @@ from fastapi.responses import Response
 router = APIRouter()
 
 
-@router.patch("/{category_id}", status_code=status.HTTP_200_OK, response_model=CategoryDTOGetMin)
+@router.patch(
+    "/{category_id}", status_code=status.HTTP_200_OK, response_model=CategoryDTOGetMin
+)
 async def update_category(
-    category_id: int, data: CategoryDTOUpdate, session: AsyncSession = Depends(get_async_db)
+    category_id: int,
+    data: CategoryDTOUpdate,
+    session: AsyncSession = Depends(get_async_db),
 ) -> CategoryDTOGetMin:
     try:
-        result = await session.execute(select(Category).where(Category.id == category_id))
+        result = await session.execute(
+            select(Category).where(Category.id == category_id)
+        )
         obj = result.scalar_one_or_none()
 
-        if obj == None:
+        if obj is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )
@@ -33,7 +38,9 @@ async def update_category(
 
         return CategoryDTOGetMin.model_validate(obj, from_attributes=True)
     except IntegrityError:
-        return Response(content="A category with such name already exists",
-                        status_code=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            content="A category with such name already exists",
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
     except HTTPException:
         raise

@@ -29,6 +29,10 @@ psycopg2-binary = ">=2.9.10,<3.0.0"
 jinja2 = ">=3.1.6,<4.0.0"
 boto3 = ">=1.39.4,<2.0.0"
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.12.3"
+pre-commit = "^4.2.0"
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"

@@ -1,6 +1,11 @@
 from src.db.init_db import Base
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, UUID, func, ForeignKey
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+)
 from sqlalchemy.orm import relationship
+
 
 class Category(Base):
     __tablename__ = "categories"
@@ -10,5 +15,3 @@ class Category(Base):
 
     articles = relationship("Article", back_populates="category")
     archived_articles = relationship("ArchivedArticle", back_populates="category")
-
-

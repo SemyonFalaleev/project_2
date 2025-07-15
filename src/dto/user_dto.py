@@ -1,7 +1,13 @@
 from typing import TYPE_CHECKING, Optional, Literal
 from uuid import UUID
-from src.db.models import User
-from pydantic import BaseModel, EmailStr, SecretStr, ValidationError, model_validator, TypeAdapter
+from pydantic import (
+    BaseModel,
+    EmailStr,
+    SecretStr,
+    ValidationError,
+    model_validator,
+    TypeAdapter,
+)
 from datetime import datetime
 from pydantic_extra_types.phone_numbers import PhoneNumber
 from typing import List
@@ -15,27 +21,27 @@ class UserDTOCreate(BaseModel):
     phone_number: PhoneNumber
     name: str
     role_id: int
-    
+
+
 class UserDTOGet(BaseModel):
-    id : UUID
+    id: UUID
     name: str
     role_id: int
     created_at: datetime
     articles: List["ArticleDTOGetMin"]
 
+
 class UserDTOGetMin(BaseModel):
-    id : UUID
+    id: UUID
     name: str
     created_at: datetime
+
 
 class UserDTOUpdate(BaseModel):
     name: Optional[str] = None
     email: Optional[EmailStr] = None
     phone_number: Optional[PhoneNumber] = None
 
-class UserSignInDTO(BaseModel):
-    email_or_phone: str
-    password: SecretStr  
 
 class UserSignInDTO(BaseModel):
     email_or_phone: str
@@ -70,12 +76,14 @@ class UserSignInDTO(BaseModel):
 
         raise ValueError("email_or_phone must be a valid email or phone number")
 
+
 class UserSignUpDTO(BaseModel):
     name: str
     email: EmailStr
     phone_number: PhoneNumber
-    password: SecretStr 
+    password: SecretStr
 
-from src.dto.article_dto import ArticleDTOGetMin 
+
+from src.dto.article_dto import ArticleDTOGetMin  # noqa: E402
+
 UserDTOGet.model_rebuild(_types_namespace={"ArticleDTOGetMin": ArticleDTOGetMin})
-                                              

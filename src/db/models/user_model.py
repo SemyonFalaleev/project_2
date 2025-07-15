@@ -1,7 +1,17 @@
 from src.db.init_db import Base
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, UUID, func, ForeignKey
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Boolean,
+    DateTime,
+    UUID,
+    func,
+    ForeignKey,
+)
 import uuid
 from sqlalchemy.orm import relationship
+
 
 class User(Base):
     __tablename__ = "users"
@@ -18,4 +28,3 @@ class User(Base):
     articles = relationship("Article", back_populates="user")
     archived_articles = relationship("ArchivedArticle", back_populates="user")
     role = relationship("Role", back_populates="users")
-

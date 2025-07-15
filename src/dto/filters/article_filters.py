@@ -1,6 +1,7 @@
 from fastapi import Query
 from typing import Optional
 
+
 class ArticleFilters:
     def __init__(
         self,

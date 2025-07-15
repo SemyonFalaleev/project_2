@@ -18,7 +18,7 @@ async def patch_user(
         result = await session.execute(select(User).where(User.id == user_uuid))
         user = result.scalar_one_or_none()
 
-        if user == None:
+        if user is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )
@@ -32,7 +32,9 @@ async def patch_user(
 
         return UserDTOGet.model_validate(user, from_attributes=True)
     except IntegrityError:
-        return Response(content="A user with such data already exists",
-                        status_code=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            content="A user with such data already exists",
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
     except HTTPException:
         raise

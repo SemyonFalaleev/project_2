@@ -17,7 +17,7 @@ async def delete_user(
         result = await session.execute(select(User).where(User.id == user_uuid))
         user = result.scalar_one_or_none()
 
-        if user == None:
+        if user is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )

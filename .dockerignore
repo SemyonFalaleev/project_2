@@ -2,3 +2,5 @@
 __pycache__
 .gitignore
 docker-compose.yaml
+.pre-commit*
+.gitignore

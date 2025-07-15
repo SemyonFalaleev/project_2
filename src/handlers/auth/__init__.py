@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from src.handlers.auth.sign_up import router as sign_up_router
 from src.handlers.auth.sign_in import router as sign_in_router
 from src.handlers.auth.logout import router as logout_router
