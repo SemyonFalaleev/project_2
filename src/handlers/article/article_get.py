@@ -23,10 +23,9 @@ async def get_articlet(
 
         if obj == None:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="Article not found"
             )
         article_dto = ArticleDTOGet.model_validate(obj, from_attributes=True)
-        article_dto.cover_image_url = config("AWS_URL")+"/"+article_dto.cover_image_url
         
         return article_dto
     

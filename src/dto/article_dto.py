@@ -1,10 +1,10 @@
 from typing import Optional
 from uuid import UUID
 from fastapi import Form
-from pydantic import BaseModel, EmailStr, SerializationInfo, field_serializer
+from pydantic import BaseModel, field_serializer
 from datetime import datetime
-from pydantic_extra_types.phone_numbers import PhoneNumber
 from typing import TYPE_CHECKING, List
+from decouple import config
 
 if TYPE_CHECKING:
     from src.dto.category_dto import CategoryDTOGetMin
@@ -33,7 +33,14 @@ class ArticleDTOUpdate(ArticleBase):
     description: Optional[str] = None
     cover_image_url: Optional[str] = None
     category_id: Optional[int] = None
-
+    @classmethod
+    def as_form(
+        cls,
+        name: str = Form(default=None),
+        description: str = Form(default=None),
+        category_id: int = Form(default=None)
+    ) -> "ArticleDTOCreate":
+        return cls(name=name, description=description, category_id=category_id)
 
 class ArticleDTOGetMin(ArticleBase):
     id: int
@@ -41,6 +48,9 @@ class ArticleDTOGetMin(ArticleBase):
     cover_image_url: str
     created_at: datetime
     updated_at: datetime
+    @field_serializer("cover_image_url")
+    def serialize_cover_image_url(self, value, info):
+        return config("EXTERNAL_HOST_AWS")+value
 
 class ArticleDTOGet(ArticleBase):
     id: int
@@ -51,6 +61,9 @@ class ArticleDTOGet(ArticleBase):
     created_at: datetime
     category: "CategoryDTOGetMin"
     user: "UserDTOGetMin"
+    @field_serializer("cover_image_url")
+    def serialize_cover_image_url(self, value, info):
+        return config("EXTERNAL_HOST_AWS")+value
 
 class ArticleDTOGetAll(ArticleBase):
     count: int

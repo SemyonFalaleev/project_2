@@ -48,8 +48,6 @@ def parse_permission_dict(path: str):
     return permission
 
 def match_path(actual_path: str, pattern_path: str) -> bool:
-    print("actual_path: ", actual_path)
-    print("pattern_path: ", pattern_path)
     if "{*}" not in pattern_path:
         return actual_path.startswith(pattern_path)
     prefix = pattern_path.split("{*}")[0]

@@ -41,24 +41,19 @@ class RBACMidleware(BaseHTTPMiddleware):
         self.permission = permission
 
     async def dispatch(self, request: Request, call_next):
-        print("Внутри RBAC")
         if (request.url.path == "/" or any(
             request.url.path.startswith(prefix)
             for prefix in UNPROTECTED_ROUTES
             if prefix != "/")): 
             return await call_next(request)
-        print("ПРошли не защищенные")
         try:
             user_data = request.state.user
         except AttributeError:
             return JSONResponse(status_code=status.HTTP_403_FORBIDDEN,
                                 content={"detail": "Invalid token"})
-        print("Токен валидный")
         method = request.method
         path = request.url.path
         allowed_routers = self.permission.get(str(user_data.get("role_id")))
-        print("path", path)
-        print("allowed_routers", allowed_routers)
         for pattern, methods in allowed_routers.items():
             if match_path(path, pattern) and method in methods:
                 return await call_next(request)

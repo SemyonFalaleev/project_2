@@ -6,33 +6,18 @@ services:
       - custom
     ports:
       - "8000:8000"
-    environment: &default_env
-      DATABASE_URL: "postgresql+asyncpg://postgres:postgres@db:5432/postgres"
-      DATABASE_URL_SYNC: postgresql://postgres:postgres@db:5432/postgres 
-      TOKEN_EXPIRE: 60
-      TOKEN_EMAIL_EXPIRE: 15
-      SECRET_KEY_JWT: supersecretkey123456789!@$
-      ALGORITM_JWT: HS256
-      PATH_TO_PERMISSION_JSON: permission.json
-      RABBITMQ_URL: amqp://guest:guest@rabbit:5672/
-      EMAIL_SENDER: cemo_013@mail.ru
-      PASSWD_EMAIL_SENDER: BuQIArp5qwcm6pTRK3y9
-      EMAIL_SERVER_ADDR: smtp.mail.ru
-      EMAIL_SERVER_PORT: 587
-      AWS_URL: http://minio:9000
-      AWS_ACCESS_KEY_ID: minioadmin
-      AWS_SECRET_ACCESS_KEY: minioadmin
+    env_file:
+      - .env 
 
   worker:
     build: .
     container_name: "celery_worker"
     command: ["poetry", "run", "celery", "-A", "src.utils.celery.celery_config:celery_app", "worker", "--loglevel=info"]
     depends_on:
-      - app
       - rabbit
       - db
-    environment:
-      <<: *default_env
+    env_file: 
+      - .env
     networks:
       - custom
 
@@ -41,11 +26,10 @@ services:
     container_name: "celery_beat"
     command: ["poetry", "run", "celery", "-A", "src.utils.celery.shedule:celery_app", "beat", "--loglevel=info"]
     depends_on:
-      - app
       - rabbit
       - db
-    environment:
-      <<: *default_env
+    env_file:
+      - .env
     networks:
       - custom
     
@@ -88,8 +72,8 @@ services:
       - "9000:9000"       
       - "9001:9001"       
     environment:
-      MINIO_ROOT_USER: minioadmin       # логин
-      MINIO_ROOT_PASSWORD: minioadmin   # пароль
+      MINIO_ROOT_USER: minioadmin     
+      MINIO_ROOT_PASSWORD: minioadmin  
     command: server --console-address ":9001" /data
     volumes:
       - minio_data:/data

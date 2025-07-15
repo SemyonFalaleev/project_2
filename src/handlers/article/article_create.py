@@ -30,7 +30,6 @@ async def create_article(cover_image: UploadFile,
     try:
         session.add(new_obj)
         await session.commit()
-        
         await session.refresh(new_obj)
     except IntegrityError:
         return Response(content="A article with such name already exists",
@@ -39,5 +38,4 @@ async def create_article(cover_image: UploadFile,
         return Response(content=f"{exp}",
                         status_code=422)
     
-    new_obj.cover_image_url =  config("AWS_URL")+"/"+new_obj.cover_image_url
     return new_obj

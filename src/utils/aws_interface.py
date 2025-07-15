@@ -32,6 +32,7 @@ class AWSClient():
                     Bucket=self.bucket_name,
                     Policy=self._public_bucket_policy()
                 )
+
     def _public_bucket_policy(self) -> str:
         policy = {
             "Version": "2012-10-17",
@@ -55,6 +56,8 @@ class AWSClient():
         Key=str(key))
         return f"{self.bucket_name}/{key}"
     
+    def delete_file_from_bucket(self, file_name: str):
+        self.s3.delete_object(Bucket=self.bucket_name, Key=file_name.split("/")[1])
         
 client_s3 = AWSClient(config("AWS_URL"),
                       config("AWS_ACCESS_KEY_ID"),
