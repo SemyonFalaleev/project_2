@@ -5,4 +5,5 @@ celerybeat*
 permission.json
 .pre-commit*
 .ruff_cache
+.vscode
 

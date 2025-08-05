@@ -1,11 +1,15 @@
+from __future__ import annotations
 from src.db.init_db import Base
-from sqlalchemy import Column, String, Integer
-from sqlalchemy.orm import relationship
+from typing import TYPE_CHECKING
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+
+if TYPE_CHECKING:
+    from src.db.models import User
 
 
 class Role(Base):
     __tablename__ = "roles"
-    id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False)
 
-    users = relationship("User", back_populates="role")
+    users: Mapped["User"] = relationship("User", back_populates="role")

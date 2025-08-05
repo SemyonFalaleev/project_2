@@ -1,13 +1,6 @@
-from typing import TYPE_CHECKING, Optional, Literal
+from typing import TYPE_CHECKING
 from uuid import UUID
-from pydantic import (
-    BaseModel,
-    EmailStr,
-    SecretStr,
-    ValidationError,
-    model_validator,
-    TypeAdapter,
-)
+from pydantic import BaseModel, EmailStr, SecretStr
 from datetime import datetime
 from pydantic_extra_types.phone_numbers import PhoneNumber
 from typing import List
@@ -35,46 +28,6 @@ class UserDTOGetMin(BaseModel):
     id: UUID
     name: str
     created_at: datetime
-
-
-class UserDTOUpdate(BaseModel):
-    name: Optional[str] = None
-    email: Optional[EmailStr] = None
-    phone_number: Optional[PhoneNumber] = None
-
-
-class UserSignInDTO(BaseModel):
-    email_or_phone: str
-    password: SecretStr
-    login_type: Optional[Literal["email", "phone_number", None]] = None
-
-    @model_validator(mode="before")
-    @classmethod
-    def validate_email_or_phone(cls, values):
-        raw = values.get("email_or_phone")
-        if not raw:
-            raise ValueError("email or phone number is required")
-
-        email_adapter = TypeAdapter(EmailStr)
-        phone_adapter = TypeAdapter(PhoneNumber)
-
-        try:
-            email = email_adapter.validate_python(raw)
-            values["email_or_phone"] = email
-            values["login_type"] = "email"
-            return values
-        except ValidationError:
-            pass
-
-        try:
-            phone = phone_adapter.validate_python(raw)
-            values["email_or_phone"] = phone
-            values["login_type"] = "phone_number"
-            return values
-        except ValidationError:
-            pass
-
-        raise ValueError("email_or_phone must be a valid email or phone number")
 
 
 class UserSignUpDTO(BaseModel):

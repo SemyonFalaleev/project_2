@@ -8,7 +8,7 @@ USER_ROLE = 1
 AUTHOR_ROLE = 2
 ADMIN_ROLE = 3
 
-UNPROTECTED_ROUTES: List[str] = ["/docs", "/openapi.json", "/", "/auth/"]
+UNPROTECTED_ROUTES: List[str] = ["/docs", "/openapi.json", "/", "/auth/", "/health"]
 
 
 def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
