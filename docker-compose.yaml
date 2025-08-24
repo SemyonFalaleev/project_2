@@ -1,0 +1,116 @@
+services:
+  app:
+    build: .
+    container_name: "app"
+    networks:
+      - custom
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  worker:
+    build: .
+    container_name: "celery_worker"
+    command: ["poetry", "run", "celery", "-A", "src.utils.celery.celery_config:celery_app", "worker", "--loglevel=info"]
+    depends_on:
+      - rabbit
+      - db
+    env_file: 
+      - .env
+    networks:
+      - custom
+
+  beat:
+    build: .
+    container_name: "celery_beat"
+    command: ["poetry", "run", "celery", "-A", "src.utils.celery.shedule:celery_app", "beat", "--loglevel=info"]
+    depends_on:
+      - rabbit
+      - db
+    env_file:
+      - .env
+    networks:
+      - custom
+    
+  db: 
+    container_name: "db"
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports: 
+      - "5433:5432"
+    networks: 
+      - custom
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbit:
+    container_name: "rabbitmq"
+    image: "rabbitmq:3-management"
+    networks:
+      - custom
+    ports: 
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+  
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    networks:
+      - custom
+    ports:
+      - "9000:9000"       
+      - "9001:9001"       
+    environment:
+      MINIO_ROOT_USER: minioadmin     
+      MINIO_ROOT_PASSWORD: minioadmin  
+    command: server --console-address ":9001" /data
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  
+networks:
+  custom:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+  minio_data:
+
+
+
+
+
+
